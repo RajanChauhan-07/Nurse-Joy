@@ -17,7 +17,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Columns3, UserPlus } from "lucide-react";
+import { Columns3 } from "lucide-react";
+import { AdmitPatientDialog } from "@/components/ui/admit-patient-dialog";
 
 export type PatientRecord = {
   id: string;
@@ -87,13 +88,14 @@ const patientColumns = [
 ] as const;
 
 export function PatientsTable() {
+  const [patients, setPatients] = useState<PatientRecord[]>(samplePatients);
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     ...patientColumns,
   ]);
   const [searchFilter, setSearchFilter] = useState("");
   const [doctorFilter, setDoctorFilter] = useState("");
 
-  const filteredPatients = samplePatients.filter((patient) => {
+  const filteredPatients = patients.filter((patient) => {
     const matchesSearch =
       !searchFilter ||
       patient.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
@@ -110,6 +112,10 @@ export function PatientsTable() {
     );
   };
 
+  const handlePatientAdmitted = (newPatient: PatientRecord) => {
+    setPatients((prev) => [newPatient, ...prev]);
+  };
+
   return (
     <div className="w-full space-y-4 p-5 border border-border rounded-xl bg-background shadow-sm">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between pb-2 border-b border-border">
@@ -123,10 +129,7 @@ export function PatientsTable() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white gap-1.5">
-            <UserPlus className="size-3.5" />
-            Admit Patient
-          </Button>
+          <AdmitPatientDialog onPatientAdmitted={handlePatientAdmitted} />
         </div>
       </div>
 

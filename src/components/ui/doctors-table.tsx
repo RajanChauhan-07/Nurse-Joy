@@ -17,7 +17,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Columns3, UserPlus } from "lucide-react";
+import { Columns3 } from "lucide-react";
+import { RegisterDoctorDialog } from "@/components/ui/register-doctor-dialog";
 
 export type DoctorProfile = {
   id: string;
@@ -87,13 +88,14 @@ const doctorColumns = [
 ] as const;
 
 export function DoctorsTable() {
+  const [doctors, setDoctors] = useState<DoctorProfile[]>(sampleDoctors);
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     ...doctorColumns,
   ]);
   const [searchFilter, setSearchFilter] = useState("");
   const [specialtyFilter, setSpecialtyFilter] = useState("");
 
-  const filteredDoctors = sampleDoctors.filter((doc) => {
+  const filteredDoctors = doctors.filter((doc) => {
     const matchesSearch =
       !searchFilter ||
       doc.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
@@ -110,6 +112,10 @@ export function DoctorsTable() {
     );
   };
 
+  const handleDoctorRegistered = (newDoctor: DoctorProfile) => {
+    setDoctors((prev) => [newDoctor, ...prev]);
+  };
+
   return (
     <div className="w-full space-y-4 p-5 border border-border rounded-xl bg-background shadow-sm">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between pb-2 border-b border-border">
@@ -123,10 +129,7 @@ export function DoctorsTable() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white gap-1.5">
-            <UserPlus className="size-3.5" />
-            Register Doctor
-          </Button>
+          <RegisterDoctorDialog onDoctorRegistered={handleDoctorRegistered} />
         </div>
       </div>
 
@@ -201,7 +204,7 @@ export function DoctorsTable() {
                     </TableCell>
                   )}
                   {visibleColumns.includes("Badge ID") && (
-                    <TableCell className="whitespace-nowrap font-mono text-xs text-muted-foreground">
+                    <TableCell className="whitespace-nowrap text-muted-foreground text-xs font-mono">
                       {doc.badgeId}
                     </TableCell>
                   )}
@@ -211,7 +214,7 @@ export function DoctorsTable() {
                     </TableCell>
                   )}
                   {visibleColumns.includes("Department") && (
-                    <TableCell className="whitespace-nowrap text-muted-foreground text-xs">
+                    <TableCell className="whitespace-nowrap text-muted-foreground text-sm">
                       {doc.department}
                     </TableCell>
                   )}
@@ -233,7 +236,7 @@ export function DoctorsTable() {
                   colSpan={visibleColumns.length}
                   className="text-center py-8 text-muted-foreground"
                 >
-                  No matching doctors found.
+                  No matching doctor profiles found.
                 </TableCell>
               </TableRow>
             )}
