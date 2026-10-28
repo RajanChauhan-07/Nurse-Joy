@@ -9,14 +9,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -24,106 +16,74 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { Columns3, Stethoscope, UserPlus } from "lucide-react";
+import { Columns3, UserPlus } from "lucide-react";
 
 export type DoctorProfile = {
   id: string;
-  badgeId: string;
   name: string;
+  badgeId: string;
   specialty: string;
   department: string;
-  experience: string;
   shiftHours: string;
-  status: "On Duty" | "In Surgery" | "On Call" | "Off Duty";
-  avatar: string;
-  email: string;
   contactNumber: string;
-  patientsCount: number;
 };
 
 export const sampleDoctors: DoctorProfile[] = [
   {
     id: "1",
-    badgeId: "DOC-401",
     name: "Dr. Evelyn Reed, MD",
+    badgeId: "DOC-401",
     specialty: "General & Trauma Surgery",
     department: "Surgical Services",
-    experience: "12 yrs",
     shiftHours: "08:00 - 18:00",
-    status: "In Surgery",
-    avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=120&auto=format&fit=crop&q=80",
-    email: "evelyn.reed@pokemoncenter.org",
     contactNumber: "+1 (555) 234-5678",
-    patientsCount: 6,
   },
   {
     id: "2",
-    badgeId: "DOC-402",
     name: "Dr. Marcus Chen, MD",
+    badgeId: "DOC-402",
     specialty: "Cardiology",
     department: "Cardiovascular Wing",
-    experience: "15 yrs",
     shiftHours: "07:00 - 16:00",
-    status: "On Duty",
-    avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=120&auto=format&fit=crop&q=80",
-    email: "marcus.chen@pokemoncenter.org",
     contactNumber: "+1 (555) 345-6789",
-    patientsCount: 11,
   },
   {
     id: "3",
-    badgeId: "DOC-403",
     name: "Dr. Sophia Patel, MD",
+    badgeId: "DOC-403",
     specialty: "Critical Care & ICU",
     department: "Emergency & ICU",
-    experience: "9 yrs",
     shiftHours: "18:00 - 06:00",
-    status: "On Call",
-    avatar: "https://images.unsplash.com/photo-1594824813603-ee838882894b?w=120&auto=format&fit=crop&q=80",
-    email: "sophia.patel@pokemoncenter.org",
     contactNumber: "+1 (555) 456-7890",
-    patientsCount: 4,
   },
   {
     id: "4",
-    badgeId: "DOC-404",
     name: "Dr. James Wilson, MD",
+    badgeId: "DOC-404",
     specialty: "Pulmonology & Internal",
     department: "Pulmonary Medicine",
-    experience: "18 yrs",
     shiftHours: "08:30 - 17:00",
-    status: "On Duty",
-    avatar: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=120&auto=format&fit=crop&q=80",
-    email: "james.wilson@pokemoncenter.org",
     contactNumber: "+1 (555) 567-8901",
-    patientsCount: 8,
   },
   {
     id: "5",
-    badgeId: "DOC-405",
     name: "Dr. Rachel Adams, MD",
+    badgeId: "DOC-405",
     specialty: "Pediatrics & Neonatology",
     department: "Pediatric Unit",
-    experience: "7 yrs",
     shiftHours: "09:00 - 17:00",
-    status: "Off Duty",
-    avatar: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?w=120&auto=format&fit=crop&q=80",
-    email: "rachel.adams@pokemoncenter.org",
     contactNumber: "+1 (555) 678-9012",
-    patientsCount: 0,
   },
 ];
 
 const doctorColumns = [
-  "Doctor",
+  "Physician - Name",
   "Badge ID",
   "Specialty",
   "Department",
   "Shift Hours",
-  "Patients",
-  "Status",
+  "Contact",
 ] as const;
 
 export function DoctorsTable() {
@@ -131,18 +91,17 @@ export function DoctorsTable() {
     ...doctorColumns,
   ]);
   const [searchFilter, setSearchFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [specialtyFilter, setSpecialtyFilter] = useState("");
 
   const filteredDoctors = sampleDoctors.filter((doc) => {
     const matchesSearch =
       !searchFilter ||
       doc.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-      doc.specialty.toLowerCase().includes(searchFilter.toLowerCase()) ||
       doc.department.toLowerCase().includes(searchFilter.toLowerCase());
-    const matchesStatus =
-      !statusFilter ||
-      doc.status.toLowerCase().includes(statusFilter.toLowerCase());
-    return matchesSearch && matchesStatus;
+    const matchesSpecialty =
+      !specialtyFilter ||
+      doc.specialty.toLowerCase().includes(specialtyFilter.toLowerCase());
+    return matchesSearch && matchesSpecialty;
   });
 
   const toggleColumn = (col: string) => {
@@ -155,12 +114,11 @@ export function DoctorsTable() {
     <div className="w-full space-y-4 p-5 border border-border rounded-xl bg-background shadow-sm">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between pb-2 border-b border-border">
         <div>
-          <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-            <Stethoscope className="size-5 text-orange-500" />
-            Medical Staff & Specialists
+          <h3 className="text-lg font-semibold text-foreground">
+            Doctors
           </h3>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Active physician roster, specialty departments, and shift coverage
+            Active physician roster, medical departments, and contact details
           </p>
         </div>
 
@@ -175,15 +133,15 @@ export function DoctorsTable() {
       <div className="flex flex-wrap gap-3 items-center justify-between">
         <div className="flex gap-2 flex-wrap items-center">
           <Input
-            placeholder="Search doctor or specialty..."
+            placeholder="Search doctor or department..."
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
             className="w-56 h-9 text-xs"
           />
           <Input
-            placeholder="Filter by status (e.g. On Duty)..."
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            placeholder="Filter by specialty..."
+            value={specialtyFilter}
+            onChange={(e) => setSpecialtyFilter(e.target.value)}
             className="w-52 h-9 text-xs"
           />
         </div>
@@ -213,8 +171,8 @@ export function DoctorsTable() {
         <Table className="w-full">
           <TableHeader>
             <TableRow className="bg-muted/30">
-              {visibleColumns.includes("Doctor") && (
-                <TableHead className="w-[220px]">Physician</TableHead>
+              {visibleColumns.includes("Physician - Name") && (
+                <TableHead className="w-[220px]">Physician - Name</TableHead>
               )}
               {visibleColumns.includes("Badge ID") && (
                 <TableHead className="w-[120px]">Badge ID</TableHead>
@@ -226,13 +184,10 @@ export function DoctorsTable() {
                 <TableHead className="w-[180px]">Department</TableHead>
               )}
               {visibleColumns.includes("Shift Hours") && (
-                <TableHead className="w-[140px]">Shift Schedule</TableHead>
+                <TableHead className="w-[140px]">Shift Hours</TableHead>
               )}
-              {visibleColumns.includes("Patients") && (
-                <TableHead className="w-[100px]">Patients</TableHead>
-              )}
-              {visibleColumns.includes("Status") && (
-                <TableHead className="w-[120px]">Duty Status</TableHead>
+              {visibleColumns.includes("Contact") && (
+                <TableHead className="w-[160px]">Contact</TableHead>
               )}
             </TableRow>
           </TableHeader>
@@ -240,35 +195,9 @@ export function DoctorsTable() {
             {filteredDoctors.length ? (
               filteredDoctors.map((doc) => (
                 <TableRow key={doc.id} className="hover:bg-muted/40 transition-colors">
-                  {visibleColumns.includes("Doctor") && (
-                    <TableCell className="font-medium whitespace-nowrap">
-                      <div className="flex items-center gap-3">
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Avatar className="h-9 w-9 ring-1 ring-border cursor-pointer">
-                                <AvatarImage src={doc.avatar} alt={doc.name} />
-                                <AvatarFallback className="bg-orange-100 text-orange-800 text-xs">
-                                  {doc.name.slice(4, 6)}
-                                </AvatarFallback>
-                              </Avatar>
-                            </TooltipTrigger>
-                            <TooltipContent className="text-sm bg-neutral-900 text-white p-2">
-                              <p className="font-semibold">{doc.name}</p>
-                              <p className="text-xs text-neutral-300">{doc.email}</p>
-                              <p className="text-xs text-neutral-300">{doc.contactNumber}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                        <div>
-                          <span className="font-semibold text-foreground block">
-                            {doc.name}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {doc.email}
-                          </span>
-                        </div>
-                      </div>
+                  {visibleColumns.includes("Physician - Name") && (
+                    <TableCell className="font-semibold text-foreground whitespace-nowrap">
+                      {doc.name}
                     </TableCell>
                   )}
                   {visibleColumns.includes("Badge ID") && (
@@ -291,26 +220,9 @@ export function DoctorsTable() {
                       {doc.shiftHours}
                     </TableCell>
                   )}
-                  {visibleColumns.includes("Patients") && (
-                    <TableCell className="whitespace-nowrap">
-                      <span className="inline-flex items-center justify-center font-semibold text-xs px-2.5 py-0.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200">
-                        {doc.patientsCount} active
-                      </span>
-                    </TableCell>
-                  )}
-                  {visibleColumns.includes("Status") && (
-                    <TableCell className="whitespace-nowrap">
-                      <Badge
-                        className={cn(
-                          "whitespace-nowrap text-[11px] font-medium border-none",
-                          doc.status === "On Duty" && "bg-emerald-600 text-white",
-                          doc.status === "In Surgery" && "bg-purple-600 text-white",
-                          doc.status === "On Call" && "bg-amber-500 text-white",
-                          doc.status === "Off Duty" && "bg-gray-400 text-white",
-                        )}
-                      >
-                        {doc.status}
-                      </Badge>
+                  {visibleColumns.includes("Contact") && (
+                    <TableCell className="whitespace-nowrap text-muted-foreground text-xs font-mono">
+                      {doc.contactNumber}
                     </TableCell>
                   )}
                 </TableRow>
