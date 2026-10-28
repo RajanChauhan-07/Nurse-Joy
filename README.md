@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nurse Joy - Hospital Records Management System
 
-## Getting Started
+A full-stack hospital management monorepo for patient admissions, physician shift scheduling, and clinical records.
 
-First, run the development server:
+## Project Structure
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+Nurse-Joy/
+├── frontend/               # Next.js 16 (App Router), Tailwind CSS v4, TypeScript, shadcn UI
+│   ├── public/             # Static public assets (e.g. nurse-joy-greeting.jpeg)
+│   ├── src/
+│   │   ├── app/            # App routes (/ for signup, /login, /dashboard)
+│   │   ├── assets/         # Bundled image assets
+│   │   ├── components/ui/  # Reusable shadcn UI components & tables
+│   │   └── lib/            # Utilities (cn helper)
+│   ├── components.json     # shadcn configuration
+│   ├── next.config.mjs     # Next.js static export & GitHub Pages routing
+│   └── package.json
+│
+├── backend/                # Express & TypeScript REST API
+│   ├── src/
+│   │   ├── controllers/    # Patients & Doctors request handlers
+│   │   ├── models/         # TypeScript interfaces & DTOs
+│   │   ├── routes/         # REST API routes (/api/patients, /api/doctors)
+│   │   ├── middleware/     # Error handling middleware
+│   │   └── index.ts        # Server entrypoint
+│   ├── .env.example
+│   └── package.json
+│
+├── database/               # SQL schema definitions & seed fixtures
+│   ├── schema.sql          # Doctors & Patients table definitions with indexes
+│   ├── seed.sql            # Initial sample clinical data
+│   └── README.md
+│
+├── .github/workflows/      # Automated GitHub Pages CI/CD deployment
+└── package.json            # Monorepo root scripts & workspace configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Quick Start
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Frontend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cd frontend
+npm install
+npm run dev
+# Running on http://localhost:3000
+```
 
-## Learn More
+From root:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Backend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cd backend
+npm install
+cp .env.example .env
+npm run dev
+# Running on http://localhost:5000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Database
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+cd database
+# Run with PostgreSQL
+psql -d nurse_joy -f schema.sql
+psql -d nurse_joy -f seed.sql
+```
