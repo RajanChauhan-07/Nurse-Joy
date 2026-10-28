@@ -30,6 +30,8 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
+import { PatientsTable } from "@/components/ui/patients-table";
+import { DoctorsTable } from "@/components/ui/doctors-table";
 
 const destinations = [
   {
@@ -51,6 +53,12 @@ const destinations = [
 export default function AnimatedSidebarPreview() {
   const [active, setActive] = useState("Patients");
   const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const isDoctorView =
+    active === "Doctors" ||
+    active === "All doctors" ||
+    active === "On duty" ||
+    active === "Schedules";
 
   return (
     <div className="w-full h-screen">
@@ -168,31 +176,31 @@ export default function AnimatedSidebarPreview() {
             <p className="text-sm font-medium text-foreground">{active}</p>
           </header>
 
-          <div className="flex min-h-0 flex-1 flex-col justify-between overflow-hidden p-5 sm:p-7">
+          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-5 sm:p-7 space-y-6">
             <div>
-              <p className="text-xs font-medium text-muted-foreground">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Hospital Records Management
               </p>
-              <h3 className="mt-2 max-w-md text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
-                Welcome, Nurse Joy.
-              </h3>
-              <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-                Manage all registered patients, doctor schedules, and medical records from your central dashboard.
+              <h2 className="mt-1 text-2xl font-bold tracking-tight text-foreground">
+                {isDoctorView ? "Doctor Roster & Shifts" : "Patient Admissions & Records"}
+              </h2>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {isDoctorView
+                  ? "View all active doctors, duty status, departments, and coverage schedules."
+                  : "View all admitted patients, medical conditions, and assigned physician teams."}
               </p>
             </div>
 
-            <div className="flex items-end justify-between border-border border-t pt-4">
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                  Active view
-                </p>
-                <p className="mt-1 text-sm font-medium text-foreground">
-                  {active}
-                </p>
-              </div>
-              <p className="hidden text-xs text-muted-foreground sm:block">
-                Press ⌘B to toggle
+            {/* Dynamic Table Screen View */}
+            <div className="w-full">
+              {isDoctorView ? <DoctorsTable /> : <PatientsTable />}
+            </div>
+
+            <div className="flex items-center justify-between border-border border-t pt-4 text-xs text-muted-foreground">
+              <p>
+                Showing view: <span className="font-semibold text-foreground">{active}</span>
               </p>
+              <p className="hidden sm:block">Press ⌘B to collapse or expand sidebar</p>
             </div>
           </div>
         </AnimatedSidebarInset>
