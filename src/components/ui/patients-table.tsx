@@ -25,8 +25,9 @@ export type PatientRecord = {
   name: string;
   age: number;
   gender: "Male" | "Female" | "Other";
+  bloodGroup: string;
   assignedDoctor: string;
-  room: string;
+  room?: string;
   lastVisit: string;
 };
 
@@ -36,6 +37,7 @@ export const samplePatients: PatientRecord[] = [
     name: "Aiden Scott",
     age: 28,
     gender: "Male",
+    bloodGroup: "O+",
     assignedDoctor: "Dr. Evelyn Reed",
     room: "Room 102",
     lastVisit: "2026-10-24",
@@ -45,6 +47,7 @@ export const samplePatients: PatientRecord[] = [
     name: "Clara Vance",
     age: 64,
     gender: "Female",
+    bloodGroup: "A+",
     assignedDoctor: "Dr. Marcus Chen",
     room: "Room 204",
     lastVisit: "2026-10-25",
@@ -54,6 +57,7 @@ export const samplePatients: PatientRecord[] = [
     name: "Lucas Rivera",
     age: 19,
     gender: "Male",
+    bloodGroup: "B+",
     assignedDoctor: "Dr. Evelyn Reed",
     room: "Room 118",
     lastVisit: "2026-10-22",
@@ -63,6 +67,7 @@ export const samplePatients: PatientRecord[] = [
     name: "Eleanor Brooks",
     age: 72,
     gender: "Female",
+    bloodGroup: "AB+",
     assignedDoctor: "Dr. Marcus Chen",
     room: "ICU - Bed 04",
     lastVisit: "2026-10-27",
@@ -72,6 +77,7 @@ export const samplePatients: PatientRecord[] = [
     name: "Maya Lin",
     age: 34,
     gender: "Female",
+    bloodGroup: "O-",
     assignedDoctor: "Dr. James Wilson",
     room: "Room 302",
     lastVisit: "2026-10-26",
@@ -82,8 +88,8 @@ const patientColumns = [
   "Name",
   "Age",
   "Gender",
+  "Blood Group",
   "Assigned Doctor",
-  "Room",
   "Last Visit",
 ] as const;
 
@@ -99,7 +105,7 @@ export function PatientsTable() {
     const matchesSearch =
       !searchFilter ||
       patient.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-      patient.room.toLowerCase().includes(searchFilter.toLowerCase());
+      patient.bloodGroup.toLowerCase().includes(searchFilter.toLowerCase());
     const matchesDoctor =
       !doctorFilter ||
       patient.assignedDoctor.toLowerCase().includes(doctorFilter.toLowerCase());
@@ -136,7 +142,7 @@ export function PatientsTable() {
       <div className="flex flex-wrap gap-3 items-center justify-between">
         <div className="flex gap-2 flex-wrap items-center">
           <Input
-            placeholder="Search patient or room..."
+            placeholder="Search patient or blood group..."
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
             className="w-56 h-9 text-xs"
@@ -183,11 +189,11 @@ export function PatientsTable() {
               {visibleColumns.includes("Gender") && (
                 <TableHead className="w-[120px]">Gender</TableHead>
               )}
+              {visibleColumns.includes("Blood Group") && (
+                <TableHead className="w-[130px]">Blood Group</TableHead>
+              )}
               {visibleColumns.includes("Assigned Doctor") && (
                 <TableHead className="w-[200px]">Assigned Doctor</TableHead>
-              )}
-              {visibleColumns.includes("Room") && (
-                <TableHead className="w-[140px]">Room</TableHead>
               )}
               {visibleColumns.includes("Last Visit") && (
                 <TableHead className="w-[140px]">Last Visit</TableHead>
@@ -213,14 +219,16 @@ export function PatientsTable() {
                       {patient.gender}
                     </TableCell>
                   )}
+                  {visibleColumns.includes("Blood Group") && (
+                    <TableCell className="whitespace-nowrap">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/80">
+                        {patient.bloodGroup}
+                      </span>
+                    </TableCell>
+                  )}
                   {visibleColumns.includes("Assigned Doctor") && (
                     <TableCell className="whitespace-nowrap font-medium text-foreground">
                       {patient.assignedDoctor}
-                    </TableCell>
-                  )}
-                  {visibleColumns.includes("Room") && (
-                    <TableCell className="whitespace-nowrap text-muted-foreground text-xs font-mono">
-                      {patient.room}
                     </TableCell>
                   )}
                   {visibleColumns.includes("Last Visit") && (
