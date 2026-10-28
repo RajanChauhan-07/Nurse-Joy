@@ -221,7 +221,7 @@ export function PatientsTable() {
                   )}
                   {visibleColumns.includes("Blood Group") && (
                     <TableCell className="whitespace-nowrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/80">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#e66f92]/10 text-[#c24a6e] border border-[#e66f92]/30">
                         {patient.bloodGroup}
                       </span>
                     </TableCell>

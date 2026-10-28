@@ -146,7 +146,7 @@ export default function AnimatedSidebarPreview() {
               type="button"
               className="flex min-h-11 w-full items-center gap-3 overflow-hidden rounded-xl p-1 text-left outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#d5ff66] text-xs font-semibold text-[#172000]">
+              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#e66f92] text-xs font-semibold text-white shadow-sm">
                 NJ
               </span>
               <span className="min-w-0 flex-1 group-data-[state=collapsed]/sidebar:hidden">

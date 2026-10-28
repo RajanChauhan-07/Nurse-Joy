@@ -91,7 +91,7 @@ export function AdmitPatientDialog({ onPatientAdmitted }: AdmitPatientDialogProp
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white gap-1.5 cursor-pointer">
+        <Button size="sm" className="bg-[#e66f92] hover:bg-[#d4597d] text-white gap-1.5 cursor-pointer shadow-sm">
           <UserPlus className="size-3.5" />
           Admit Patient
         </Button>
@@ -253,7 +253,7 @@ export function AdmitPatientDialog({ onPatientAdmitted }: AdmitPatientDialogProp
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit" form="admit-patient-form" className="bg-orange-500 hover:bg-orange-600 text-white">
+          <Button type="submit" form="admit-patient-form" className="bg-[#e66f92] hover:bg-[#d4597d] text-white shadow-sm">
             Admit Patient
           </Button>
         </DialogFooter>
